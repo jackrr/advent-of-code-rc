@@ -1,5 +1,8 @@
-(defn captcha-sum [list]
-  (let [summable-val
+#!/usr/bin/env bb
+
+(defn captcha-sum [num-str]
+  (let [list (vec (map #(Character/digit % 10) num-str))
+        summable-val
         (fn [i v]
           (let [n (if (>= i (- (count list) 1))
                     (first list)
@@ -7,7 +10,12 @@
             (if (= v n) v 0)))]
     (reduce + (map-indexed summable-val list))))
 
-(assert (= (captcha-sum [1 1 2 2]) 3))
-(assert (= (captcha-sum [1 1 1 1]) 4))
-(assert (= (captcha-sum [1 2 3 4]) 0))
-(assert (= (captcha-sum [9 1 2 1 2 1 2 9]) 9))
+(assert (= (captcha-sum "1122") 3))
+(assert (= (captcha-sum "1111") 4))
+(assert (= (captcha-sum "1234") 0))
+(assert (= (captcha-sum "91212129") 9))
+
+(let [[nums] *command-line-args*]
+  (->> nums
+       captcha-sum
+       println))
